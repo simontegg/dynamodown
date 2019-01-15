@@ -178,7 +178,7 @@ DynamoDown.prototype._iterator = function(options) {
 }
 
 DynamoDown.prototype.createTable = function(opts, cb) {
-  var params = {
+  var params = Object.assign({
     TableName: this.tableName,
     AttributeDefinitions: [
       {
@@ -199,13 +199,12 @@ DynamoDown.prototype.createTable = function(opts, cb) {
         AttributeName: "rkey",
         KeyType: "RANGE"
       }
-    ]
-  }
-
-  params.ProvisionedThroughput = opts.ProvisionedThroughput || {
-    ReadCapacityUnits: 1,
-    WriteCapacityUnits: 1
-  }
+    ],
+    ProvisionedThroughput: {
+      ReadCapacityUnits: 1,
+      WriteCapacityUnits: 1
+    }
+  }, opts)
 
   this.ddb.createTable(params, cb)
 }
